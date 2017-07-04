@@ -108,7 +108,24 @@ public class SFTPTemplate {
 	public void setTimeout(Integer timeout) {
 		this.timeout = timeout;
 	}
+	
+	/**
+	 * 
+	 * @param filePath 上传文件路径
+	 * @param remoteDir 远程文件路径
+	 * @return
+	 */
+	public boolean upload(String filePath,String remoteDir) {
+		return upload(filePath, remoteDir, null);
+	}
 
+	/**
+	 * 
+	 * @param filePath 上传文件路径
+	 * @param remoteDir 远程文件路径
+	 * @param remoteChildDir 远程子文件目录
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public boolean upload(String filePath,String remoteDir,String remoteChildDir) {
 		Boolean result = Boolean.FALSE;
@@ -119,18 +136,20 @@ public class SFTPTemplate {
 			sftp = (ChannelSftp)session.openChannel(PROTOCOL);
 			sftp.connect(DEFAULT_TIMEOUT);
 			sftp.cd(remoteDir);
-			Vector<LsEntry> vector = sftp.ls("*");
-			boolean exist=false;
-            for(int i=0;i<vector.size();i++){  
-            	LsEntry entry = vector.get(i);
-            	String filename = entry.getFilename();
-            	boolean isDir = entry.getAttrs().isDir();
-            	exist = StringUtils.equals(filename, remoteChildDir)&&isDir;
-            } 
-            if(!exist) {
-            	sftp.mkdir(remoteChildDir);
-            	sftp.cd(remoteChildDir);
-            }
+			if(StringUtils.isNotBlank(remoteChildDir)) {
+				Vector<LsEntry> vector = sftp.ls("*");
+				boolean exist=false;
+				for(int i=0;i<vector.size();i++){  
+					LsEntry entry = vector.get(i);
+					String filename = entry.getFilename();
+					boolean isDir = entry.getAttrs().isDir();
+					exist = StringUtils.equals(filename, remoteChildDir)&&isDir;
+				} 
+				if(!exist) {
+					sftp.mkdir(remoteChildDir);
+					sftp.cd(remoteChildDir);
+				}
+			}
             File file = new File(filePath);
             if(!file.exists()) {
             	LOGGER.error("upload file not exists");
