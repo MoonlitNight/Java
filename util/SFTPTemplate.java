@@ -46,13 +46,6 @@ public class SFTPTemplate {
     private Integer port;
     
     private Integer timeout;
-    
-	public SFTPTemplate() {
-	}
-
-	public SFTPTemplate(String hostName, Integer port) {
-		this(hostName,port,null,null);
-	}
 	
 	public SFTPTemplate(String host, Integer port, String username, String password) {
 		if(StringUtils.isBlank(host))
