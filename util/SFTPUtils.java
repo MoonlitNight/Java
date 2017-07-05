@@ -1,5 +1,3 @@
-package com.baozun.nebulaplus.service.util;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,9 +19,9 @@ import com.jcraft.jsch.Session;
  * @author jin.wang
  *
  */
-public class SFTPTemplate {
+public class SFTPUtils {
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(SFTPTemplate.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SFTPUtils.class);
 	
 	private static final String DEFAULT_CHARSET = "UTF-8";
 	
@@ -45,9 +43,12 @@ public class SFTPTemplate {
     
     private Integer port;
     
-    private Integer timeout;
-	
-	public SFTPTemplate(String host, Integer port, String username, String password) {
+    private Integer timeout = DEFAULT_TIMEOUT;
+    
+	public SFTPUtils() {
+	}
+
+	public SFTPUtils(String host, Integer port, String username, String password) {
 		if(StringUtils.isBlank(host))
 			throw new IllegalArgumentException("host is not null");
 		if(port==null)
@@ -127,7 +128,7 @@ public class SFTPTemplate {
 		try {
 			session = getSession();
 			sftp = (ChannelSftp)session.openChannel(PROTOCOL);
-			sftp.connect(DEFAULT_TIMEOUT);
+			sftp.connect(timeout);
 			sftp.cd(remoteDir);
 			if(StringUtils.isNotBlank(remoteChildDir)) {
 				Vector<LsEntry> vector = sftp.ls("*");
@@ -166,7 +167,7 @@ public class SFTPTemplate {
 		jsch.setKnownHosts(getHostKeyPath());
 		Session session = jsch.getSession(username, host, port );
 		session.setPassword(password);
-		session.connect(DEFAULT_TIMEOUT);
+		session.connect(timeout);
 		return session;
 	}
 
@@ -184,7 +185,7 @@ public class SFTPTemplate {
 		try {
 			session = jsch.getSession( username, host, port);
 			session.setPassword(password);
-			session.connect(DEFAULT_TIMEOUT);
+			session.connect(timeout);
 		} catch (JSchException e) {
 			addHostkey(session.getHostKey().getKey(),path);
 		} finally {

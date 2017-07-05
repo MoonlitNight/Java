@@ -1,5 +1,3 @@
-package com.jumbo.shop.daemon.service;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,9 +17,9 @@ import org.slf4j.LoggerFactory;
  * @author jin.wang
  *
  */
-public class FTPTemplate {
+public class FTPUtils {
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(FTPTemplate.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(FTPUtils.class);
 
 	private static final Integer DEFAULT_PORT = 21;
 	
@@ -35,23 +33,23 @@ public class FTPTemplate {
     
     private Integer port = DEFAULT_PORT;
     
-	public FTPTemplate() {
+	public FTPUtils() {
 		super();
 	}
 
-	public FTPTemplate(String hostName) {
+	public FTPUtils(String hostName) {
 		this(hostName,DEFAULT_PORT);
 	}
 
-	public FTPTemplate(String hostName, Integer port) {
+	public FTPUtils(String hostName, Integer port) {
 		this(hostName,null,null,port);
 	}
 	
-	public FTPTemplate(String hostName, String username, String password) {
+	public FTPUtils(String hostName, String username, String password) {
 		this(hostName,username,password,DEFAULT_PORT);
 	}
 	
-	public FTPTemplate(String hostName, String username, String password, Integer port) {
+	public FTPUtils(String hostName, String username, String password, Integer port) {
 		if(StringUtils.isBlank(hostName))
 			throw new IllegalArgumentException("hostName is not null");
 		this.hostname = hostName;
