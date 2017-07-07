@@ -52,7 +52,7 @@ public class CSVUtils {
 					buffer.append(COMMA);
 				}
 				writer.write(buffer.toString());
-				if(index==len-1)
+				if(index==length-1)
 					break;
 				writer.newLine();
 			}
