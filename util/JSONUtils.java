@@ -1,5 +1,3 @@
-package com.baozun.nebulaplus.service.util;
-
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
 import java.util.List;
