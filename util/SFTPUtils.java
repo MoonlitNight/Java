@@ -196,12 +196,20 @@ public class SFTPUtils {
 	}
 
 	private void addHostkey(String key, String path) {
+		BufferedWriter writer = null;
 		try {
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), DEFAULT_CHARSET));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), DEFAULT_CHARSET));
 			writer.write(String.format(KEY_CONTENT_PATTERN, host, key));
-			writer.close();
 		} catch (Exception e) {
 			LOGGER.error("host key file write failure");
+		} finally {
+			try {
+				if(writer!=null)
+					writer.close();
+			} catch (IOException e) {
+				writer = null;
+				LOGGER.error("close OutputStream failure",e);
+			}
 		}
 	}
 	
