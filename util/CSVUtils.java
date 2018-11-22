@@ -1,3 +1,5 @@
+
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,28 +11,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-public class CSVUtils {
+/**
+ * @author jin.wang
+ * CSV 文件生成工具类
+ */
+public abstract class CSVUtils {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(CSVUtils.class);
 	
 	private static final String COMMA = ",";
 	
-	private static final String DEFAULT_CHARSET = "GBK";
+	private static final String DEFAULT_CHARSET = "UTF-8";
 	
-	private static final String FILE_SUFFIX = ".csv";
+	public static final String FILE_SUFFIX = ".csv";
 	
 	private static final String EMPTY = "";
 	
 	/**
-	 * 
+	 *
 	 * @param data 数据 
 	 * @param path 文件路径
 	 * @param filename 文件名(不包含后缀)
 	 */
 	public static boolean write(List<List<String>> data,String path,String filename) {
+		return write(data,path,filename,DEFAULT_CHARSET);
+	}
+
+	/**
+	 *
+	 * @param data 数据
+	 * @param path 文件路径
+	 * @param filename 文件名(不包含后缀)
+	 * @param charsetName 字符编码
+	 */
+	public static boolean write(List<List<String>> data,String path,String filename,String charsetName) {
 		Assert.notEmpty(data, "data must not be null or empty.");
 		Assert.hasLength(path, "path must not be null.");
 		Assert.hasLength(filename, "path must not be null.");
+		Assert.hasLength(charsetName, "charsetName must not be null.");
 		Boolean result = Boolean.FALSE;
 		File dir = new File(path);
 		if(!dir.exists())
@@ -38,7 +56,7 @@ public class CSVUtils {
 		String absolutePath = path.concat(filename).concat(FILE_SUFFIX);
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(absolutePath), DEFAULT_CHARSET));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(absolutePath), charsetName));
 			int length = data.size();
 			for (int index = 0; index < length; index++) {
 				List<String> list = data.get(index);
